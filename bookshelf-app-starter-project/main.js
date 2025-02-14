@@ -13,7 +13,7 @@ const searchBook = document.getElementById("searchSubmit");
 
 //Add to Finished or Unfinished
 
-const addToFinish = (book) => {
+const moveBook = (book) => {
   const title = document.createElement("h3");
   title.innerText = book.title;
 
@@ -23,9 +23,25 @@ const addToFinish = (book) => {
   const year = document.createElement("p");
   year.innerText = `Tahun: ${book.year}`;
 
+  const buttonFinish = document.createElement("button");
+  buttonFinish.innerText = "Selesai dibaca";
+  buttonFinish.setAttribute("data-testid", "bookItemIsCompleteButton");
+
+  const buttonDelete = document.createElement("button");
+  buttonDelete.innerText = "Hapus Buku";
+  buttonDelete.setAttribute("data-testid", "bookItemDeleteButton");
+
+  const buttonEdit = document.createElement("button");
+  buttonEdit.innerText = "Edit Buku";
+  buttonEdit.setAttribute("data-testid", "bookItemEditButton");
+
+  const buttonContainer = document.createElement("div");
+  buttonContainer.append(buttonFinish, buttonDelete, buttonEdit);
+
   const bookContainer = document.createElement("div");
   bookContainer.setAttribute("data-Bookid", book.id);
-  bookContainer.append(title, author, year);
+  bookContainer.setAttribute("data-testid", "bookItem");
+  bookContainer.append(title, author, year, buttonContainer);
 
   return bookContainer;
 };
@@ -43,8 +59,9 @@ const addBook = () => {
   books.push(book);
   console.log(books);
   if (book.isComplete) {
-    let temp = addToFinish(book);
-    document.getElementById("completeBookList").appendChild(temp);
+    document.getElementById("completeBookList").appendChild(moveBook(book));
+  } else {
+    document.getElementById("incompleteBookList").appendChild(moveBook(book));
   }
 };
 
