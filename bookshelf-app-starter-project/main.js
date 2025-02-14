@@ -15,12 +15,15 @@ const searchBook = document.getElementById("searchSubmit");
 
 const moveBook = (book) => {
   const title = document.createElement("h3");
+  title.setAttribute("data-testid", "bookItemTitle");
   title.innerText = book.title;
 
   const author = document.createElement("p");
+  author.setAttribute("data-testid", "bookItemAuthor");
   author.innerText = `Penulis: ${book.author}`;
 
   const year = document.createElement("p");
+  year.setAttribute("data-testid", "bookItemYear");
   year.innerText = `Tahun: ${book.year}`;
 
   const buttonFinish = document.createElement("button");
@@ -43,7 +46,39 @@ const moveBook = (book) => {
   bookContainer.setAttribute("data-testid", "bookItem");
   bookContainer.append(title, author, year, buttonContainer);
 
+ 
+  buttonFinish.addEventListener("click", (e) => {
+    e.preventDefault();
+    book.isComplete = !book.isComplete; 
+    updateBookList(); 
+  });
+
+  
+  // buttonDelete.addEventListener("click", (e) => {
+  //   e.preventDefault();
+  //   books = books.filter((b) => b.id !== book.id);
+  //   updateBookList(); 
+  // });
+
   return bookContainer;
+};
+
+//update book list
+
+const updateBookList = () => {
+  const completeBookList = document.getElementById("completeBookList");
+  const incompleteBookList = document.getElementById("incompleteBookList");
+
+  completeBookList.innerHTML = "";
+  incompleteBookList.innerHTML = "";
+
+  for (let i = 0; i < books.length; i++) {
+    if (books[i].isComplete) {
+      completeBookList.append(moveBook(books[i]));
+    } else {
+      incompleteBookList.append(moveBook(books[i]));
+    }
+  }
 };
 
 //add book
@@ -78,7 +113,7 @@ const findBook = () => {
   }
 
   const searchResult = document.getElementById("searchBook");
-  bookToFind.innerHTML = "";
+  searchResult.innerHTML = "";
 
   if (isFind !== -1) {
     const bookInfo = document.createElement("p");
